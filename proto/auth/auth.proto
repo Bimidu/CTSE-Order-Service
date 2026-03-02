@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/Bimidu/ctse-order-service/proto/auth";
+
+service AuthService {
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
+  rpc GetUserInfo(GetUserInfoRequest) returns (UserInfo);
+  rpc UpdatePurchaseCount(UpdatePurchaseCountRequest) returns (UpdatePurchaseCountResponse);
+}
+
+message VerifyTokenRequest {
+  string token = 1;
+}
+
+message VerifyTokenResponse {
+  bool valid = 1;
+  string user_id = 2;
+  string role = 3;
+  string email = 4;
+  string name = 5;
+}
+
+message GetUserInfoRequest {
+  string user_id = 1;
+}
+
+message UserInfo {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string role = 4;
+  string mood = 5;
+  string tier = 6;
+  int32 purchase_count = 7;
+}
+
+message UpdatePurchaseCountRequest {
+  string user_id = 1;
+  int32 increment = 2;
+}
+
+message UpdatePurchaseCountResponse {
+  bool success = 1;
+  int32 new_count = 2;
+}

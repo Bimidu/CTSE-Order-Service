@@ -41,6 +41,7 @@ func (s *CartService) AddItem(userID string, req *models.AddToCartRequest) (*mod
 		Price:     req.Price,
 		Quantity:  req.Quantity,
 		MoodTag:   req.MoodTag,
+		ImageURL:  req.ImageURL,
 	}
 
 	if err := database.DB.Create(item).Error; err != nil {

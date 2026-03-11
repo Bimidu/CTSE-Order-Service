@@ -34,6 +34,7 @@ type OrderItem struct {
 	Price     float64   `gorm:"not null" json:"price"`
 	Quantity  int       `gorm:"not null" json:"quantity"`
 	MoodTag   string    `json:"mood_tag,omitempty"`
+	ImageURL  string    `json:"image_url,omitempty"`
 }
 
 type UpdateOrderStatusRequest struct {

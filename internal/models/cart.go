@@ -14,6 +14,7 @@ type CartItem struct {
 	Price     float64   `gorm:"not null" json:"price"`
 	Quantity  int       `gorm:"not null;check:quantity > 0" json:"quantity"`
 	MoodTag   string    `json:"mood_tag,omitempty"`
+	ImageURL  string    `json:"image_url,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -24,6 +25,7 @@ type AddToCartRequest struct {
 	Price     float64 `json:"price" binding:"required,gt=0"`
 	Quantity  int     `json:"quantity" binding:"required,min=1"`
 	MoodTag   string  `json:"mood_tag"`
+	ImageURL  string  `json:"image_url"`
 }
 
 type UpdateCartItemRequest struct {

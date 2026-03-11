@@ -66,6 +66,7 @@ func (s *OrderService) Checkout(userID string) (*models.Order, error) {
 			Price:     item.Price,
 			Quantity:  item.Quantity,
 			MoodTag:   item.MoodTag,
+			ImageURL:  item.ImageURL,
 		}
 	}
 

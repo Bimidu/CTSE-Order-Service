@@ -17,8 +17,18 @@ import (
 	"github.com/Bimidu/ctse-order-service/internal/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+	_ "github.com/Bimidu/ctse-order-service/docs"
 )
 
+// @title           CTSE Order Service API
+// @version         1.0
+// @description     Order, cart, and admin endpoints for the CTSE microservice suite.
+// @BasePath        /
+// @securityDefinitions.apikey BearerAuth
+// @in              header
+// @name            Authorization
 func main() {
 	config.Load()
 
@@ -114,6 +124,8 @@ func setupRouter() *gin.Engine {
 			admin.PUT("/orders/:id/status", orderH.UpdateOrderStatus)
 		}
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
 	return r
 }

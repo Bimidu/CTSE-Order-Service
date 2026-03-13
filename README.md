@@ -27,13 +27,33 @@ A production-ready Order microservice for the Rule-Based Mood-Driven E-Commerce 
 
 | Component | Technology |
 |-----------|-----------|
-| Language  | Go 1.22   |
+| Language  | Go 1.25   |
 | Framework | Gin       |
 | Database  | PostgreSQL (Neon — serverless) |
 | ORM       | GORM      |
 | Inter-service | gRPC (Protocol Buffers) |
 | Auth      | JWT (local verify + Auth Service gRPC) |
 | CI/CD     | GitHub Actions → GHCR → AWS ECS |
+
+---
+
+## Project Structure
+
+```
+CTSE-Order-Service/
+  cmd/server/           # HTTP + gRPC entrypoint
+  grpc/                 # gRPC clients + server
+  internal/
+    config/             # env/config loading
+    database/           # DB connection + migrations
+    handlers/           # HTTP handlers
+    middleware/         # auth + RBAC
+    models/             # DB models + request/response DTOs
+    services/           # business logic
+    testutils/          # test DB helpers
+  proto/                # gRPC contracts
+  docs/                 # OpenAPI/Swagger specs + deployment/security docs
+```
 
 ---
 
@@ -54,7 +74,7 @@ A production-ready Order microservice for the Rule-Based Mood-Driven E-Commerce 
 ## Local Development
 
 ### Prerequisites
-- Go 1.22+
+- Go 1.25+
 - `protoc` + Go plugins (run `make proto` to regenerate proto files)
 
 ### Setup
@@ -72,11 +92,30 @@ The service starts on:
 - **HTTP**: `http://localhost:6969`
 - **gRPC**: `localhost:50052`
 
+### Swagger (OpenAPI)
+
+OpenAPI files are already committed in `docs/`. If you want to regenerate from annotations:
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest
+$(go env GOPATH)/bin/swag init -g cmd/server/main.go
+```
+
 ### Run tests
 
 ```bash
 make test
 ```
+
+### Test layout
+
+Tests are organized by package to keep scope clear:
+
+- `internal/models/models_test.go`
+- `internal/services/*_test.go`
+- `internal/handlers/handlers_test.go`
+- `internal/middleware/auth_middleware_test.go`
+- `grpc/server/order_server_test.go`
 
 ---
 
@@ -92,9 +131,28 @@ make docker-build
 
 ---
 
+## Run via API Gateway (full stack)
+
+From `CTSE-API-Gateway/`:
+
+```bash
+docker compose up --build
+```
+
+This exposes:
+- Gateway: `http://localhost/health`
+- Order: `http://localhost/api/v1/*`
+- Auth: `http://localhost/auth/*`
+- Product: `http://localhost/products`
+
+---
+
 ## API Reference
 
 All endpoints (except `/health`) require `Authorization: Bearer <token>`.
+
+- Swagger UI: `GET /swagger/index.html`
+- OpenAPI files: `docs/swagger.json` and `docs/swagger.yaml`
 
 ### Health
 | Method | Path | Auth | Description |
@@ -160,6 +218,19 @@ push to main
     └── deploy (AWS ECS Fargate)
 ```
 
+### CI/CD setup (step by step)
+
+Why: The pipeline needs credentials and target resources to deploy automatically.
+
+Steps:
+1. Create the ECS cluster, task definition, and service listed in `docs/deployment.md`.
+2. In GitHub → Settings → Secrets and variables → Actions, add:
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `AWS_REGION`
+   - `SONAR_TOKEN`
+3. Push to `main` to trigger the pipeline and verify the deploy step.
+
 ### Required GitHub Secrets
 
 | Secret | Description |
@@ -171,6 +242,13 @@ push to main
 
 ### Required GitHub Environment Variables (production environment)
 Set in repository → Settings → Environments → production.
+
+---
+
+## Deployment & Security Docs
+
+- Deployment guide: `docs/deployment.md`
+- Security measures: `docs/security.md`
 
 ---
 

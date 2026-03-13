@@ -4,6 +4,9 @@ import (
 	"testing"
 
 	"github.com/Bimidu/ctse-order-service/internal/models"
+	"github.com/Bimidu/ctse-order-service/internal/services"
+	"github.com/Bimidu/ctse-order-service/internal/testutils"
+	"github.com/google/uuid"
 )
 
 func TestAddToCartRequestValidation(t *testing.T) {
@@ -70,3 +73,104 @@ func TestOrderStatusConstants(t *testing.T) {
 		}
 	}
 }
+
+func TestCartServiceAddItemAndIncrement(t *testing.T) {
+	testutils.SetupTestDB(t)
+
+	svc := services.NewCartService()
+	userID := "user-1"
+
+	item, err := svc.AddItem(userID, &models.AddToCartRequest{
+		ProductID: "prod-1",
+		Name:      "Test Product",
+		Price:     10.0,
+		Quantity:  2,
+	})
+	if err != nil {
+		t.Fatalf("expected add item to succeed, got error: %v", err)
+	}
+	if item.Quantity != 2 {
+		t.Fatalf("expected quantity 2, got %d", item.Quantity)
+	}
+
+	item, err = svc.AddItem(userID, &models.AddToCartRequest{
+		ProductID: "prod-1",
+		Name:      "Test Product",
+		Price:     10.0,
+		Quantity:  3,
+	})
+	if err != nil {
+		t.Fatalf("expected add item (increment) to succeed, got error: %v", err)
+	}
+	if item.Quantity != 5 {
+		t.Fatalf("expected quantity 5, got %d", item.Quantity)
+	}
+}
+
+func TestCartServiceUpdateAndRemoveItem(t *testing.T) {
+	testutils.SetupTestDB(t)
+
+	svc := services.NewCartService()
+	userID := "user-1"
+
+	item, err := svc.AddItem(userID, &models.AddToCartRequest{
+		ProductID: "prod-2",
+		Name:      "Another Product",
+		Price:     7.5,
+		Quantity:  1,
+	})
+	if err != nil {
+		t.Fatalf("expected add item to succeed, got error: %v", err)
+	}
+
+	updated, err := svc.UpdateItem(userID, item.ID, &models.UpdateCartItemRequest{Quantity: 4})
+	if err != nil {
+		t.Fatalf("expected update to succeed, got error: %v", err)
+	}
+	if updated.Quantity != 4 {
+		t.Fatalf("expected quantity 4, got %d", updated.Quantity)
+	}
+
+	err = svc.RemoveItem(userID, item.ID)
+	if err != nil {
+		t.Fatalf("expected remove to succeed, got error: %v", err)
+	}
+
+	missingID := uuid.New()
+	if err := svc.RemoveItem(userID, missingID); err == nil {
+		t.Fatalf("expected remove to fail for missing item")
+	}
+}
+
+func TestCartServiceGetCartTotals(t *testing.T) {
+	testutils.SetupTestDB(t)
+
+	svc := services.NewCartService()
+	userID := "user-2"
+
+	_, _ = svc.AddItem(userID, &models.AddToCartRequest{
+		ProductID: "prod-a",
+		Name:      "Item A",
+		Price:     5.0,
+		Quantity:  2,
+	})
+	_, _ = svc.AddItem(userID, &models.AddToCartRequest{
+		ProductID: "prod-b",
+		Name:      "Item B",
+		Price:     3.0,
+		Quantity:  1,
+	})
+
+	cart, err := svc.GetCart(userID)
+	if err != nil {
+		t.Fatalf("expected get cart to succeed, got error: %v", err)
+	}
+	if cart.ItemCount != 2 {
+		t.Fatalf("expected 2 items, got %d", cart.ItemCount)
+	}
+	if cart.TotalPrice != 13.0 {
+		t.Fatalf("expected total 13.0, got %.2f", cart.TotalPrice)
+	}
+}
+
+

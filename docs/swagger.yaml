@@ -1,0 +1,313 @@
+swagger: "2.0"
+info:
+  title: CTSE Order Service API
+  version: "1.0"
+  description: Order, cart, and admin endpoints for the CTSE microservice suite.
+basePath: /
+schemes:
+  - http
+  - https
+securityDefinitions:
+  BearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /health:
+    get:
+      summary: Service health check
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+  /api/v1/cart/items:
+    post:
+      summary: Add item to cart
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddToCartRequest"
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/CartItem"
+  /api/v1/cart:
+    get:
+      summary: Get current user's cart
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/CartResponse"
+    delete:
+      summary: Clear all items from cart
+      security:
+        - BearerAuth: []
+      responses:
+        "204":
+          description: No Content
+  /api/v1/cart/items/{id}:
+    put:
+      summary: Update cart item quantity
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateCartItemRequest"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/CartItem"
+    delete:
+      summary: Remove item from cart
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        "204":
+          description: No Content
+  /api/v1/orders/checkout:
+    post:
+      summary: Checkout - create order from cart
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: "#/definitions/CheckoutResponse"
+  /api/v1/orders:
+    get:
+      summary: Get current user's orders
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          type: integer
+        - in: query
+          name: offset
+          required: false
+          type: integer
+      responses:
+        "200":
+          description: OK
+  /api/v1/orders/{id}:
+    get:
+      summary: Get a specific order by ID
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/Order"
+  /api/v1/admin/orders:
+    get:
+      summary: Admin - get all orders
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          type: integer
+        - in: query
+          name: offset
+          required: false
+          type: integer
+        - in: query
+          name: status
+          required: false
+          type: string
+      responses:
+        "200":
+          description: OK
+  /api/v1/admin/orders/{id}/status:
+    put:
+      summary: Admin - update order status
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateOrderStatusRequest"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/Order"
+definitions:
+  AddToCartRequest:
+    type: object
+    required:
+      - product_id
+      - name
+      - price
+      - quantity
+    properties:
+      product_id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+        format: float
+      quantity:
+        type: integer
+      mood_tag:
+        type: string
+      image_url:
+        type: string
+  UpdateCartItemRequest:
+    type: object
+    required:
+      - quantity
+    properties:
+      quantity:
+        type: integer
+  CartItem:
+    type: object
+    properties:
+      id:
+        type: string
+      user_id:
+        type: string
+      product_id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+        format: float
+      quantity:
+        type: integer
+      mood_tag:
+        type: string
+      image_url:
+        type: string
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  CartResponse:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/CartItem"
+      total_price:
+        type: number
+        format: float
+      item_count:
+        type: integer
+  OrderItem:
+    type: object
+    properties:
+      id:
+        type: string
+      order_id:
+        type: string
+      product_id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+        format: float
+      quantity:
+        type: integer
+      mood_tag:
+        type: string
+      image_url:
+        type: string
+  Order:
+    type: object
+    properties:
+      id:
+        type: string
+      user_id:
+        type: string
+      status:
+        type: string
+      total_amount:
+        type: number
+        format: float
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/OrderItem"
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  UpdateOrderStatusRequest:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        type: string
+  CheckoutResponse:
+    type: object
+    properties:
+      order:
+        $ref: "#/definitions/Order"
+      message:
+        type: string
+

@@ -91,6 +91,12 @@ github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
+github.com/swaggo/files v1.0.1 h1:qAB0bV0RI86CPMEBWIDvHDvzb5hI24sEQJRq7qd0C1g=
+github.com/swaggo/files v1.0.1/go.mod h1:nQyknGKujuYlQdFdFgaScVLDVkMZHnZgANe0eI6DPo=
+github.com/swaggo/gin-swagger v1.6.1 h1:Sp5fvLhg2m5l/eFJkXyPRPDQ7z8hgC0shNyg7yGO4nI=
+github.com/swaggo/gin-swagger v1.6.1/go.mod h1:hA3/PNfBrRJfMOBvAAJhxGTr7Vb/Yc6gfvDm8pSfI4=
+github.com/swaggo/swag v1.16.4 h1:DlJPCJqW2mfBKJ71LqnwSGrmWoXxIEhZFGbJyqU11EQ=
+github.com/swaggo/swag v1.16.4/go.mod h1:Tpl94vVJbEJ1YNVJqDKvF1v0N4M8VJMWnWx21L+JyOE=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.3.1 h1:waO7eEiFDwidsBN6agj1vJQ4AG7lh2yqXyOXqhgQuyY=
@@ -135,6 +141,8 @@ google.golang.org/protobuf v1.36.11/go.mod h1:HTf+CrKn2C3g5S8VImy6tdcUvCska2kB7j
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gorm.io/driver/sqlite v1.6.0 h1:aH9vq4q3DfLpPKHCmN3L5L5hVhUXnOQk78Gsl2bFEZs=
+gorm.io/driver/sqlite v1.6.0/go.mod h1:1i1EIFAH7mKGzHlIqP4sL5L4DwH+FLcn1Jl/EGhwIU=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gorm.io/driver/postgres v1.6.0 h1:2dxzU8xJ+ivvqTRph34QX+WrRaJlmfyPqXmoGVjMBa4=
 gorm.io/driver/postgres v1.6.0/go.mod h1:vUw0mrGgrTK+uPHEhAdV4sfFELrByKVGnaVRkXDhtWo=

@@ -17,8 +17,8 @@ import (
 	"github.com/Bimidu/ctse-order-service/internal/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerfiles "github.com/swaggo/files"
+	ginswagger "github.com/swaggo/gin-swagger"
 	_ "github.com/Bimidu/ctse-order-service/docs"
 )
 
@@ -125,7 +125,7 @@ func setupRouter() *gin.Engine {
 		}
 	}
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
+	r.GET("/swagger/*any", ginswagger.WrapHandler(swaggerfiles.Handler))
 
 	return r
 }

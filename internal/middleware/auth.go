@@ -16,7 +16,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// AuthRequired verifies the JWT. It first tries local verification for performance,
+// AuthRequired verifie the JWT. It first tries local verification for performance,
 // then falls back to the Auth Service gRPC call if local verification fails.
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {

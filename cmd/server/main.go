@@ -24,7 +24,7 @@ import (
 
 // @title           CTSE Order Service API
 // @version         1.0
-// @description     Order, cart, and admin endpoints for the CTSE microservice suite.
+// @description     Order, cart, and admin endpoints for the CTSE microsevice suite.
 // @BasePath        /
 // @securityDefinitions.apikey BearerAuth
 // @in              header

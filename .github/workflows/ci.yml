@@ -126,6 +126,7 @@ jobs:
         run: |
           aws ecs describe-task-definition \
             --task-definition ctse-order-service \
+            --region ${{ secrets.AWS_REGION }} \
             --query taskDefinition > task-definition.json
 
       - name: Update ECS task definition with new image

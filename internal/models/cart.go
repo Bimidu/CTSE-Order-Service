@@ -7,7 +7,7 @@ import (
 )
 
 type CartItem struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
 	UserID    string    `gorm:"not null;index" json:"user_id"`
 	ProductID string    `gorm:"not null" json:"product_id"`
 	Name      string    `gorm:"not null" json:"name"`

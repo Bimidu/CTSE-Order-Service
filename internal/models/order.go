@@ -17,7 +17,7 @@ const (
 )
 
 type Order struct {
-	ID          uuid.UUID   `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID          uuid.UUID   `gorm:"type:uuid;primaryKey" json:"id"`
 	UserID      string      `gorm:"not null;index" json:"user_id"`
 	Status      OrderStatus `gorm:"type:varchar(20);default:'pending'" json:"status"`
 	TotalAmount float64     `gorm:"not null" json:"total_amount"`
@@ -27,7 +27,7 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
 	OrderID   uuid.UUID `gorm:"type:uuid;not null;index" json:"order_id"`
 	ProductID string    `gorm:"not null" json:"product_id"`
 	Name      string    `gorm:"not null" json:"name"`

@@ -129,6 +129,12 @@ jobs:
             --region ${{ secrets.AWS_REGION }} \
             --query taskDefinition > task-definition.json
 
+      - name: Clean task definition
+        run: |
+          # Remove AWS-added fields that cause "Unexpected key" errors
+          cat task-definition.json | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy, .tags, .enableFaultInjection)' > task-definition-clean.json
+          mv task-definition-clean.json task-definition.json
+
       - name: Update ECS task definition with new image
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1

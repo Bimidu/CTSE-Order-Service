@@ -88,6 +88,14 @@ func setupRouter() *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// Simple root endpoint for quick sanity checks
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"service": "order-service",
+			"message": "Order Service is up",
+		})
+	})
+
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"service": "order-service",

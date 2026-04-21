@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 	"strconv"
 
 	"github.com/Bimidu/ctse-order-service/internal/middleware"
@@ -30,6 +31,9 @@ func (h *OrderHandler) Checkout(c *gin.Context) {
 	if err != nil {
 		status := http.StatusInternalServerError
 		if err.Error() == "cart is empty" {
+			status = http.StatusBadRequest
+		}
+		if strings.Contains(err.Error(), "out of stock") {
 			status = http.StatusBadRequest
 		}
 		c.JSON(status, gin.H{"error": err.Error()})
